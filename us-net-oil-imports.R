@@ -33,10 +33,9 @@ for (nam in names(df)) {
 }
 
 df <- df[df$Date >= as.POSIXct("2010-01-01 00:00:00", tz="UTC"),]
-#df <- df[month(df$Date) == 12,]
 
-df3 <- df[month(df$Date) == 12,]
-df3 <- df3[year(df3$Date) == 2017,]
+df3 <- df[year(df$Date) == max(year(df$Date)),]
+df3 <- df3[month(df3$Date) == max(month(df3$Date)),]
 df3 <- melt(df3, id.vars=c("Date"))
 df3 <- df3[order(df3$value),]
 df3 <- df3[complete.cases(df3), ]
