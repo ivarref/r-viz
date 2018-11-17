@@ -69,5 +69,10 @@ for (nam in names(df2)) {
 df4 <- melt(df2, id.vars=c("Date"))
 
 ggplot(df4, aes(x=Date, y=value, fill=variable)) +
-  geom_area(data=df4[df4$variable != "Total", ]) +
-  geom_line(data=df4[df4$variable == "Total", ])
+  labs(title="Netto import av petroleum og andre væsker, USA",
+       x="Tid",
+       y="Tusen fat per dag",
+       fill="Område",
+       caption = "Kjelde: EIA.") +
+  geom_area(data=df4[df4$variable != "Total", ])
+  #geom_line(data=df4[df4$variable == "Total", ])
