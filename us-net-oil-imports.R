@@ -34,21 +34,21 @@ for (nam in names(df)) {
 
 df <- df[df$Date >= as.POSIXct("2010-01-01 00:00:00", tz="UTC"),]
 
-df3 <- df[year(df$Date) == max(year(df$Date)),]
-df3 <- df3[month(df3$Date) == max(month(df3$Date)),]
-df3 <- melt(df3, id.vars=c("Date"))
-df3 <- df3[order(df3$value),]
-df3 <- df3[complete.cases(df3), ]
+dfLatestSorted <- df[year(df$Date) == max(year(df$Date)),]
+dfLatestSorted <- dfLatestSorted[month(dfLatestSorted$Date) == max(month(dfLatestSorted$Date)),]
+dfLatestSorted <- melt(dfLatestSorted, id.vars=c("Date"))
+dfLatestSorted <- dfLatestSorted[order(dfLatestSorted$value),]
+dfLatestSorted <- dfLatestSorted[complete.cases(dfLatestSorted), ]
 
-df3
+dfLatestSorted
 
 df2 <- df[, names(df) %in% c("Date", 
                              "Total",
                              "OPEC Countries",
                              "Non-OPEC Countries"
-                             #"Canada"       #1
+                             #"Canada"        #1
                              #"Saudi Arabia", #2
-                             #"Venezuela"    #3
+                             #"Venezuela"     #3
                              #"Iraq",         #4
                              #"Russia",       #5
                              #"Nigeria",      #6
@@ -58,21 +58,16 @@ df2 <- df[, names(df) %in% c("Date",
                              #"Angola"        #10
                              )]
 
-df2[is.na(df2)] <- 0
+#df2[is.na(df2)] <- 0
 
-for (nam in names(df2)) {
-  if (nam != "Date" & nam != "Total") {
-    print(nam)
-  }
-}
+df3 <- melt(df2, id.vars=c("Date"))
 
-df4 <- melt(df2, id.vars=c("Date"))
-
-ggplot(df4, aes(x=Date, y=value, fill=variable)) +
-  labs(title="Netto import av petroleum og andre væsker, USA",
+ggplot(df3, aes(x=Date, y=value, fill=variable)) +
+  labs(title="USA, netto import av petroleum og andre væsker",
+       subtitle="12 månadar glidande gjennomsnitt",
        x="Tid",
        y="Tusen fat per dag",
        fill="Område",
        caption = "Kjelde: EIA.") +
-  geom_area(data=df4[df4$variable != "Total", ])
-  #geom_line(data=df4[df4$variable == "Total", ])
+  geom_area(data=df3[df3$variable != "Total", ])
+  # + geom_line(data=df4[df4$variable == "Total", ])
