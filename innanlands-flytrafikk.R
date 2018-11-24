@@ -5,7 +5,7 @@ library(dplyr)
 
 # https://ec.europa.eu/eurostat/web/transport/data/database
 
-date <- "2016-01-01"
+date <- "2017-01-01"
 
 pop <- get_eurostat("tps00001")
 pop <- label_eurostat(pop)
@@ -56,8 +56,8 @@ ren("Austria", "Austerrike")
 ggplot(wide, aes(x=reorder(geo, -per_capita),
                y=per_capita))+
   geom_bar(stat="identity") +
-  ggtitle("Innanlands flytrafikk", subtitle="Antall reiser per innbyggjar, 2016") +
+  ggtitle("Innanlands flytrafikk", subtitle="Antall reiser per innbyggjar, 2017") +
   labs(x="Land / Område",
        y="Antall reiser per innbyggjar",
-       caption = "Kjelde: Eurostat (tabell avia_paoc og tps00001, 2016)") + 
+       caption = "Kjelde: Eurostat (tabell avia_paoc og tps00001, 2017)") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
