@@ -15,16 +15,20 @@ df <- ApiData(url,
 
 df <- df[, !(names(df) %in% c("kjønn", "sektor", "statistikkvariabel"))]
 
+df$value <- (df$value*12)
+
 ggplot(df, aes(x = reorder(desil, value),
                y = value,
                fill = år)) +
   geom_bar(stat = "identity", width = .75, position = "dodge2") +
+  scale_y_continuous(breaks=c(0, 250e3, 500e3, 750e3, 1000e3),
+                     labels=c("0", "250 000", "500 000", "750 000", "1 mill.")) +
   coord_flip() +
   guides(fill = guide_legend(reverse=TRUE)) +
-  labs(title="Gjennomsnittleg månadslønn",
+  labs(title="Gjennomsnittleg årslønn",
        subtitle="Etter desil. Alle sektorar, begge kjønn.",
        x="Desil",
-       y="Gjennomsnittleg månadslønn",
+       y="Gjennomsnittleg årslønn",
        fill="År",
        caption = "Kjelde: SSB (tabell 11423).") +
   scale_fill_brewer(palette = "Dark2")
