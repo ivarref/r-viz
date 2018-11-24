@@ -21,7 +21,7 @@ ggplot(df, aes(x = reorder(desil, value),
                y = value,
                fill = år)) +
   geom_bar(stat = "identity", width = .75, position = "dodge2") +
-  scale_y_continuous(breaks=c(0, 250e3, 500e3, 750e3, 1000e3),
+  scale_y_continuous(breaks=c(0, 250e3, 500e3, 750e3, 1e6),
                      labels=c("0", "250 000", "500 000", "750 000", "1 mill.")) +
   coord_flip() +
   guides(fill = guide_legend(reverse=TRUE)) +
