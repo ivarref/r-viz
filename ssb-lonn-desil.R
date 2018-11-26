@@ -31,9 +31,6 @@ fmt <- function(n) {
 }
 wide$endring = mapply(fmt, wide$endring)
 
-wide$hack <- 1300e3
-
-#lim <- c(0, 1350e3)
 breaks <- c(0, 250e3, 500e3, 750e3, 1e6)
 labels <- c("0", "250K", "500K", "750K", "1M")
 
