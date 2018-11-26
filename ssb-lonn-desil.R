@@ -33,24 +33,26 @@ wide$endring = mapply(fmt, wide$endring)
 
 wide$hack <- 1300e3
 
-lim <- c(0, 1350e3)
-breaks <- c(0, 250e3, 500e3, 750e3, 1e6, 1.25e6)
-labels <- c("0", "250K", "500K", "750K", "1M", "1,25M")
+#lim <- c(0, 1350e3)
+breaks <- c(0, 250e3, 500e3, 750e3, 1e6)
+labels <- c("0", "250K", "500K", "750K", "1M")
 
 ggplot(wide, 
        aes(x = reorder(desil, value),
            label=endring,
            y = value)) +
+  theme_bw() +
   geom_bar(stat = "identity", width = .65, position = "dodge2") +
-  scale_y_continuous(limits = lim, breaks=breaks, labels=labels) +
-  coord_flip() +
+  scale_y_continuous(breaks=breaks, labels=labels) +
+  geom_text(aes(y = 1280e3), color="black", size=3, hjust="right") +
+  coord_flip(ylim=c(0, max(wide$`2017`)), clip="off") +
   guides(fill = guide_legend(reverse=TRUE)) +
-  geom_text(aes(y = hack), color="red", size=3, hjust="right") +
+  theme(plot.margin = unit(c(1,3.5,1,1), "lines")) +
   labs(title="Gjennomsnittleg årslønn",
        subtitle="Etter desil. Alle sektorar, begge kjønn.",
-       subsubtitle="mjau",
        x="Desil",
        y="Gjennomsnittleg årslønn",
        fill="År",
-       caption = "Kjelde: SSB (tabell 11423).") +
-  scale_fill_brewer(palette = "Dark2")
+       caption = "Kjelde: SSB (tabell 11423).")
+  #scale_fill_brewer(palette = "Dark2")
+
