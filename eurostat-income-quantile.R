@@ -5,6 +5,8 @@ library(dplyr)
 library(reshape2)
 
 df <- get_eurostat("ilc_di01")
+# http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=en
+# https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/dv-vd/inc-rev/index-eng.cfm
 df <- label_eurostat(df)
 
 remove_geos <- c("European Union (before the accession of Croatia)",
