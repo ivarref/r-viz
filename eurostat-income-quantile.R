@@ -2,6 +2,7 @@ library(eurostat)
 library(ggplot2)
 library(tidyr)
 library(dplyr)
+library(reshape2)
 
 df <- get_eurostat("ilc_di01")
 df <- label_eurostat(df)
@@ -23,7 +24,10 @@ df <- df[df$geo %in% filter_geos, ]
 unique(df$geo)
 
 filter_quantiles <- c("Fifth percentile",
-                      "Ninety-fifth percentile")
+                      "First quantile",
+                      "Fourth decile",
+                      "Ninety-fifth percentile",
+                      "Ninety-ninth percentile")
 quantiles <- unique(df$quantile)
 df <- df[df$quantile %in% filter_quantiles, ] 
 
@@ -31,4 +35,24 @@ indic_il <- unique(df$indic_il)
 df <- df[df$indic_il %in% c("Top cut-off point"), ]
 df <- df[df$currency %in% c("Euro"), ]
 df <- df[, !(names(df) %in% c("currency", "indic_il"))]
-df
+wide <- dcast(df, time ~ quantile, value.var="values")
+wide <- wide[complete.cases(wide), ]
+
+#for (k in filter_quantiles) {
+#  print(k)
+#  wide[[k]] <- 100 * wide[[k]] / wide[[k]][1]
+#}
+
+wide
+
+df <- melt(wide, id.vars=c("time"))
+
+ggplot(df, aes(x = time,
+               colour=variable,
+               y = value)) +
+  geom_line(size=1.3) +
+  labs(title="Frankrike. Inntekt etter desil og persentil",
+       x="Tid",
+       y="Euro, top cut-off point",
+       caption = "Kjelde: Eurostat (tabell ilc_di01).") +
+  scale_fill_brewer(palette = "Dark2")
