@@ -48,6 +48,6 @@ ggplot(df, aes(x = reorder(desil, endring),
        x="Desil",
        y="Millionar kroner",
        fill="År",
-       caption = "Kjelde: SSB (tabell 10318).\nDiagram: Refsdal.Ivar@gmail.com") +
+       caption = "Kjelde: SSB (tabell 10318)\nDiagram: Refsdal.Ivar@gmail.com") +
   scale_y_continuous(labels = scales::comma) +
   scale_fill_brewer(palette = "Dark2")
