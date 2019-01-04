@@ -6,12 +6,15 @@ library(reshape2)
 # https://www.ssb.no/inntekt-og-forbruk/statistikker/ifhus/aar
 # https://www.ssb.no/statbank/table/10318
 
-url <- "http://data.ssb.no/api/v0/no/table/10318"
 mf <- ApiData(url, returnMetaFrames = TRUE)
+
+url <- "http://data.ssb.no/api/v0/no/table/10318"
 df <- ApiData(url, 
               Tid=c("2010", "2017"),
               Desiler=TRUE,
               ContentsCode=c("BereknFormue"))
+
+df
 
 df <- df$`10318: Del av berekna nettoformue, gjennomsnittleg berekna nettoformue og lågaste verdi i desil for hushald, etter desil, statistikkvariabel og år`
 
