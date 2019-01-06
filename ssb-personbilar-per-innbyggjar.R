@@ -13,4 +13,7 @@ pop <- ApiData("http://data.ssb.no/api/v0/no/table/05803",
                Tid=TRUE,
                ContentsCode=c("Befolkning"))
 pop <- pop$`05803: Endringer i befolkningen i løpet av året, etter statistikkvariabel og år`
+pop <- pop[pop$år >= 1950, ]
+pop <- pop[, !names(pop) %in% c("statistikkvariabel")]
+colnames(pop)[colnames(pop)=="value"] <- "befolkning"
 pop
