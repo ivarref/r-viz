@@ -1,6 +1,5 @@
 library(PxWebApiData)
 library(ggplot2)
-library(ggrepel)
 library(reshape2)
 
 # https://www.ssb.no/inntekt-og-forbruk/statistikker/ifhus/aar
