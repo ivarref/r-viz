@@ -2,8 +2,8 @@ library(PxWebApiData)
 library(ggplot2)
 library(reshape2)
 
-# Registrerte kjøretøy
-# https://www.ssb.no/statbank/table/01960 
+# Registrerte kjøretøy, etter kjøretøygruppe 1950 - 2017
+# https://www.ssb.no/statbank/table/01960
 
 # Endringer i befolkningen i løpet av året 1735 - 2018
 # https://www.ssb.no/statbank/table/05803
