@@ -20,8 +20,8 @@ colnames(pop)[colnames(pop)=="value"] <- "befolkning"
 df <- ApiData("http://data.ssb.no/api/v0/no/table/01960",
               Tid=TRUE,
               ContentsCode=c("Personbiler", 
-                             "Busser", 
-                             "Lastebiler", 
+                             "Busser",
+                             "Lastebiler",
                              "Varebiler"
                              ))
 df <- df$`01960: Registrerte kjøretøy, etter statistikkvariabel og år`
@@ -34,17 +34,28 @@ df$statistikkvariabel[df$statistikkvariabel == "Lastebiler"] <- "Lastebilar"
 df$statistikkvariabel[df$statistikkvariabel == "Personbiler"] <- "Personbilar"
 df$statistikkvariabel[df$statistikkvariabel == "Varebiler"] <- "Varebilar"
 
+brks <- c("Personbilar", "Varebilar", "Lastebilar", "Bussar")
+
+# https://stackoverflow.com/questions/8197559/emulate-ggplot2-default-color-palette
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
+cols <- gg_color_hue(4)
+
 ggplot(df,
        aes(x=år,
            y=per1000Innb,
            group=statistikkvariabel,
            color=statistikkvariabel))+
   geom_line(size=1.2) +
-  guides(fill = guide_legend(reverse=TRUE, title="Hello")) +
   scale_x_discrete(breaks = seq(1950, 2017, 10)) +
+  scale_color_manual(breaks = brks, labels = brks, values = cols) +
   labs(title="Antall køyretøy per 1000 innbyggjar",
        subtitle="Noreg, 1950-2017",
        x="År",
+       color="Køyretøytype",
        y="Antall køyretøy per 1000 innbyggjar",
        caption = "Diagram: Refsdal.Ivar@gmail.com\nKjelde: SSB")
   
