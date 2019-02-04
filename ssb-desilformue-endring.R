@@ -53,3 +53,6 @@ ggplot(df, aes(x = reorder(desil, endring),
        caption = "Kjelde: SSB (tabell 10318)\nDiagram: Refsdal.Ivar@gmail.com") +
   scale_y_continuous(labels = scales::comma) +
   scale_fill_brewer(palette = "Dark2")
+
+# 1 2 3 4   5 6    7 8 9 10
+#           ^^^ = median
