@@ -24,6 +24,9 @@ fmt <- function(n) {
   if (n>=1e6) {
     return(sprintf("%s.", gsub("\\.", ",", sprintf("%.1f mill", n/1e6))))
   }
+  if (n<=-1e6) {
+    return(sprintf("%s.", gsub("\\.", ",", sprintf("%.1f mill", n/1e6))))
+  }
   return(format(n, digits=9, decimal.mark=",",
                 big.mark=" ",small.mark=".", , small.interval=3))
 }
