@@ -1,4 +1,5 @@
 library(eurostat)
+library(tidyverse)
 library(ggplot2)
 library(tidyr)
 library(dplyr)
@@ -38,7 +39,7 @@ ren <- function(from, to) {
 }
 ren("Germany (until 1990 former territory of the FRG)", "Germany")
 ren("Former Yugoslav Republic of Macedonia, the", "Macedonia")
-ren("European Union (current composition)", "EU28 gj.snitt")
+ren("European Union - 28 countries", "EU28 gj.snitt")
 
 ren("Norway", "Noreg")
 ren("Sweden", "Sverige")
@@ -53,11 +54,11 @@ ren("Croatia", "Kroatia")
 ren("Switzerland", "Sveits")
 ren("Austria", "Austerrike")
 
-ggplot(wide, aes(x=reorder(geo, -per_capita),
-               y=per_capita))+
-  geom_bar(stat="identity") +
+ggplot(wide, aes(x=reorder(geo, per_capita),
+                 y=per_capita))+
+  geom_bar(stat="identity", fill="steelblue") +
+  coord_flip() +
   ggtitle("Innanlands flytrafikk", subtitle="Antall reiser per innbyggjar, 2017") +
   labs(x="Land / Område",
-       y="Antall reiser per innbyggjar",
-       caption = "Kjelde: Eurostat (tabell avia_paoc og tps00001, 2017)") + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+       y="Antall reiser per innbyggjar per år",
+       caption = "Kjelde: Eurostat (tabell avia_paoc og tps00001, 2017)")
