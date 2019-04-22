@@ -1,0 +1,92 @@
+---
+title: "Drivstofftype"
+author: "Ivar Refsdal"
+date: "4/22/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Målsetning
+
+Vise utvikling i antall køyretøy etter drivstofftype med tanke på
+el-bilens inntog.
+
+SSB-tabell [07849: Drivstofftype, type kjøring og kjøretøygrupper (K) 2008 - 2018](https://www.ssb.no/statbank/table/07849) er mest relevant.
+
+Ynskjer å hente ut årleg endring.
+
+## Vise endring for alle personbiltypar
+
+```{r}
+library(tidyverse)
+library(PxWebApiData)
+
+df_org <- ApiData("http://data.ssb.no/api/v0/no/table/07849",
+                  Region = c("Hele landet"),
+                  KjoringensArt = c("Egentransport"),
+                  DrivstoffType = TRUE,
+                  ContentsCode = c("Personbiler"),
+                  Tid = TRUE)$`07849: Drivstofftype, type kjøring og kjøretøygrupper, etter region, type kjøring, drivstofftype, statistikkvariabel og år`
+
+df <- df_org %>%
+  rename(type_kjoring = "type kjøring", ar = "år") %>%
+  group_by(ar) %>%
+  summarize(value = sum(value)) %>%
+  arrange(ar) %>%
+  mutate(change = value - lag(value, 1)) %>%
+  remove_missing()
+
+ggplot(df, aes(x = ar, y = change)) + 
+  geom_bar(stat="identity")
+```
+
+## Årleg endring i antall personbilar etter hovuddrivstofftype
+
+```{r}
+library(tidyverse)
+library(PxWebApiData)
+
+df_org <- ApiData("http://data.ssb.no/api/v0/no/table/07849",
+                  Region = c("Hele landet"),
+                  KjoringensArt = c("Egentransport"),
+                  DrivstoffType = TRUE,
+                  ContentsCode = c("Personbiler"),
+                  Tid = TRUE)$`07849: Drivstofftype, type kjøring og kjøretøygrupper, etter region, type kjøring, drivstofftype, statistikkvariabel og år`
+
+df <- df_org %>%
+  rename(type_kjoring = "type kjøring", ar = "år") %>%
+  mutate(fossil = drivstofftype %in% c("Bensin", "Diesel", "Gass", "Parafin")) %>%
+  group_by(fossil, ar) %>%
+  summarize(value = sum(value)) %>%
+  arrange(ar, fossil) %>%
+  mutate(change = value - lag(value, 1)) %>%
+  remove_missing()
+
+ggplot(df, aes(x = ar, y = change, fill = fossil)) + 
+  geom_bar(stat="identity")
+```
+
+
+## Endring i antall personbilar mot siste ti år 1960-2018
+
+```{r}
+library(tidyverse)
+library(PxWebApiData)
+
+df_org <- ApiData("http://data.ssb.no/api/v0/no/table/01960",
+                  Tid=TRUE,
+                  ContentsCode=c("Personbiler"))$`01960: Kjøretøygrupper, etter statistikkvariabel og år`
+
+df <- df_org %>%
+  rename(ar = "år") %>%
+  mutate(ar = as.integer(ar)) %>%
+  arrange(ar) %>%
+  mutate(change = value - lag(value, 10))
+
+ggplot(df, aes(x = ar, y = change)) +
+ geom_line()
+
+```

@@ -4,6 +4,7 @@ library(ggplot2)
 library(reshape2)
 library(zoo)
 library(lubridate)
+library(tidyverse)
 
 # https://www.eia.gov/dnav/pet/PET_MOVE_NETI_A_EP00_IMN_MBBLPD_M.htm
 url <- "https://www.eia.gov/dnav/pet/xls/PET_MOVE_NETI_A_EP00_IMN_MBBLPD_M.xls"

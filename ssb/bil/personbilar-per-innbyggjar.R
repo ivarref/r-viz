@@ -24,7 +24,7 @@ df <- ApiData("http://data.ssb.no/api/v0/no/table/01960",
                              "Lastebiler",
                              "Varebiler"
                              ))
-df <- df$`01960: Registrerte kjøretøy, etter statistikkvariabel og år`
+df <- df$`01960: Kjøretøygrupper, etter statistikkvariabel og år`
 df <- inner_join(df, pop)
 
 df$per1000Innb <- df$value / (df$befolkning/1000)
