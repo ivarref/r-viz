@@ -40,7 +40,6 @@ ggplot(df, aes(x = year, y = Value)) +
 ```{r}
 library(tidyverse)
 library(zoo)
-
 # https://www.eia.gov/totalenergy/data/browser/?tbl=T11.01B&fbclid=IwAR0UMyPJ_9DhYMeMzn7FLcDsC0lPs8xc1b_NBB8_94RiExxx5ntB4jGy2uk#/?f=M&start=197301&end=201812&charted=0-11-12
 
 url <- "https://www.eia.gov/totalenergy/data/browser/csv.php?tbl=T11.01B"
@@ -56,8 +55,8 @@ df <- df_org %>%
   filter(!endsWith(YYYYMM, "13"), # 13 means annual production
          Description == "World") %>%
   arrange(YYYYMM) %>%
-  mutate(Value2 = rollmean(x = Value, 12, align = "right", fill = NA))
+  mutate(Value2 = rollmean(x = Value, 12, align = "right", fill = NA) / 1000)
 
   ggplot(df, aes(x = YYYYMM, y = Value2)) +
-  geom_bar(stat="identity")
+  geom_line(aes(group = Description))
 ```
