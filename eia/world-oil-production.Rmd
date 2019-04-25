@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
-```{r cars}
+```{r}
 library(tidyverse)
 
 # https://www.eia.gov/totalenergy/data/browser/?tbl=T11.01B&fbclid=IwAR0UMyPJ_9DhYMeMzn7FLcDsC0lPs8xc1b_NBB8_94RiExxx5ntB4jGy2uk#/?f=M&start=197301&end=201812&charted=0-11-12
@@ -33,5 +33,31 @@ df <- df_org %>%
   arrange(year)
 
 ggplot(df, aes(x = year, y = Value)) +
+  geom_bar(stat="identity")
+```
+
+
+```{r}
+library(tidyverse)
+library(zoo)
+
+# https://www.eia.gov/totalenergy/data/browser/?tbl=T11.01B&fbclid=IwAR0UMyPJ_9DhYMeMzn7FLcDsC0lPs8xc1b_NBB8_94RiExxx5ntB4jGy2uk#/?f=M&start=197301&end=201812&charted=0-11-12
+
+url <- "https://www.eia.gov/totalenergy/data/browser/csv.php?tbl=T11.01B"
+fil <- "MER_T11_01B.csv"
+download.file(url, destfile=fil, method="libcurl")
+df_org <- read_csv(fil, guess_max = 10000)
+
+df <- df_org %>%
+  select(-c(MSN, Column_Order)) %>%
+  mutate(YYYYMM = as.character(YYYYMM)) %>%
+  mutate(Description = str_replace(Description, "Crude Oil Production, ", "")) %>%
+  mutate(Value = as.double(Value)) %>%
+  filter(!endsWith(YYYYMM, "13"), # 13 means annual production
+         Description == "World") %>%
+  arrange(YYYYMM) %>%
+  mutate(Value2 = rollmean(x = Value, 12, align = "right", fill = NA))
+
+  ggplot(df, aes(x = YYYYMM, y = Value2)) +
   geom_bar(stat="identity")
 ```

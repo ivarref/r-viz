@@ -18,7 +18,7 @@ SSB-tabell [07849: Drivstofftype, type kjøring og kjøretøygrupper (K) 2008 - 
 
 Ynskjer å hente ut årleg endring.
 
-## Vise endring for alle personbiltypar
+## Endring for alle personbiltypar
 
 ```{r}
 library(tidyverse)
@@ -40,6 +40,9 @@ df <- df_org %>%
   remove_missing()
 
 ggplot(df, aes(x = ar, y = change)) + 
+  labs(title="Endring i antall personbilar",
+       y = "Antall personbilar",
+       x = "År") +
   geom_bar(stat="identity")
 ```
 
@@ -65,7 +68,11 @@ df <- df_org %>%
   mutate(change = value - lag(value, 1)) %>%
   remove_missing()
 
-ggplot(df, aes(x = ar, y = change, fill = fossil)) + 
+ggplot(df, aes(x = ar, y = change, fill = fossil)) +
+  labs(title="Endring i antall personbilar",
+       subtitle="Etter drivstofftype",
+       y="Antall personbilar",
+       x="År") +
   geom_bar(stat="identity")
 ```
 
