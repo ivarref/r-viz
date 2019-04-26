@@ -40,6 +40,8 @@ ggplot(df, aes(x = year, y = Value)) +
 ```{r}
 library(tidyverse)
 library(zoo)
+library(lubridate)
+
 # https://www.eia.gov/totalenergy/data/browser/?tbl=T11.01B&fbclid=IwAR0UMyPJ_9DhYMeMzn7FLcDsC0lPs8xc1b_NBB8_94RiExxx5ntB4jGy2uk#/?f=M&start=197301&end=201812&charted=0-11-12
 
 url <- "https://www.eia.gov/totalenergy/data/browser/csv.php?tbl=T11.01B"
@@ -49,14 +51,21 @@ df_org <- read_csv(fil, guess_max = 10000)
 
 df <- df_org %>%
   select(-c(MSN, Column_Order)) %>%
-  mutate(YYYYMM = as.character(YYYYMM)) %>%
   mutate(Description = str_replace(Description, "Crude Oil Production, ", "")) %>%
-  mutate(Value = as.double(Value)) %>%
+  mutate(YYYYMM = as.character(YYYYMM)) %>%
   filter(!endsWith(YYYYMM, "13"), # 13 means annual production
          Description == "World") %>%
+  mutate(date = ceiling_date(ymd(YYYYMM, truncated= 1), "month") - days(1)) %>%
+  select(YYYYMM, date, everything()) %>%
+  mutate(Value = as.double(Value)) %>%
   arrange(YYYYMM) %>%
-  mutate(Value2 = rollmean(x = Value, 12, align = "right", fill = NA) / 1000)
+  mutate(Value2 = rollmean(x = Value, k = 12, align = "right", fill = NA) / 1000) %>%
+  remove_missing()
 
-  ggplot(df, aes(x = YYYYMM, y = Value2)) +
-  geom_line(aes(group = Description))
+  ggplot(df, aes(x = date, y = Value2)) +
+  geom_line(aes(group = Description)) +
+  labs(title="Global råoljeproduksjon",
+       subtitle="12 månadar glidande gjennomsnitt",
+       x="År",
+       y="Millionar fat per dag")
 ```
