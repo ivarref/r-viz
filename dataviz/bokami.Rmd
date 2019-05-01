@@ -1,0 +1,24 @@
+---
+title: "Untitled"
+author: "Ivar Refsdal"
+date: "5/1/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ...
+
+```{r}
+library(tidyverse)
+library(socviz)
+library(gapminder)
+
+ggplot(gapminder, aes(x=gdpPercap, y=lifeExp, color=year)) +
+  geom_point(alpha=1) + 
+  geom_smooth(method="loess") + 
+  scale_x_log10(labels = scales::comma)
+ggsave(filename="suchwow.png")
+```
