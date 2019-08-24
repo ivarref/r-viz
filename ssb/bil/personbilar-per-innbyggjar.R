@@ -3,10 +3,10 @@ library(ggplot2)
 library(reshape2)
 library(dplyr)
 
-# Registrerte kjøretøy, etter kjøretøygruppe 1950 - 2017
+# Registrerte kjøretøy, etter kjøretøygruppe 1950 - 2018
 # https://www.ssb.no/statbank/table/01960
 
-# Endringer i befolkningen i løpet av året 1735 - 2018
+# Endringer i befolkningen i løpet av året 1735 - 2019
 # https://www.ssb.no/statbank/table/05803
 
 pop <- ApiData("http://data.ssb.no/api/v0/no/table/05803",
@@ -50,12 +50,12 @@ ggplot(df,
            group=statistikkvariabel,
            color=statistikkvariabel))+
   geom_line(size=1.2) +
-  scale_x_discrete(breaks = seq(1950, 2017, 10)) +
+  scale_x_discrete(breaks = seq(1950, 2018, 10)) +
   scale_color_manual(breaks = brks, labels = brks, values = cols) +
   labs(title="Antall køyretøy per 1000 innbyggjar",
-       subtitle="Noreg, 1950-2017",
+       subtitle="Noreg, 1950—2018",
        x="År",
        color="Køyretøytype",
        y="Antall køyretøy per 1000 innbyggjar",
-       caption = "Diagram: Refsdal.Ivar@gmail.com\nKjelde: SSB")
+       caption = "Diagram: Refsdal.Ivar@gmail.com\nKjelde: SSB tabell 01960 og 05803")
   
